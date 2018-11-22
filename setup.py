@@ -29,6 +29,7 @@ class SupportedPlatformEnum(object):
     WINDOWS_32 = 4
     WINDOWS_64 = 5
     OPENBSD_64 = 6
+    FREEBSD10_64 = 7
 
 
 CURRENT_PLATFORM = None
@@ -39,8 +40,10 @@ if architecture()[0] == '64bit':
         CURRENT_PLATFORM = SupportedPlatformEnum.LINUX_64
     elif platform == 'win32':
         CURRENT_PLATFORM = SupportedPlatformEnum.WINDOWS_64
-    elif platform in ['openbsd5', 'freebsd10']:
+    elif platform == 'openbsd5':
         CURRENT_PLATFORM = SupportedPlatformEnum.OPENBSD_64
+    elif platform == 'freebsd10':
+        CURRENT_PLATFORM = SupportedPlatformEnum.FREEBSD10_64
 elif architecture()[0] == '32bit':
     if platform in ['linux', 'linux2']:
         CURRENT_PLATFORM = SupportedPlatformEnum.LINUX_32
