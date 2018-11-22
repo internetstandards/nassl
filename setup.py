@@ -29,7 +29,7 @@ class SupportedPlatformEnum(object):
     WINDOWS_32 = 4
     WINDOWS_64 = 5
     OPENBSD_64 = 6
-    FREEBSD10_64 = 7
+    FREEBSD_64 = 7
 
 
 CURRENT_PLATFORM = None
@@ -43,7 +43,7 @@ if architecture()[0] == '64bit':
     elif platform == 'openbsd5':
         CURRENT_PLATFORM = SupportedPlatformEnum.OPENBSD_64
     elif platform == 'freebsd10':
-        CURRENT_PLATFORM = SupportedPlatformEnum.FREEBSD10_64
+        CURRENT_PLATFORM = SupportedPlatformEnum.FREEBSD_64
 elif architecture()[0] == '32bit':
     if platform in ['linux', 'linux2']:
         CURRENT_PLATFORM = SupportedPlatformEnum.LINUX_32
@@ -59,7 +59,7 @@ LEGACY_OPENSSL_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'win32'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'win64'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'openbsd64'),
-    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'freebsd1064'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'freebsd64'),
 }
 
 MODERN_OPENSSL_INSTALL_PATH_DICT = {
@@ -69,7 +69,7 @@ MODERN_OPENSSL_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'openssl-modern', 'win32'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'win64'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'openbsd64'),
-    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'freebsd1064'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'freebsd64'),
 }
 
 ZLIB_INSTALL_PATH_DICT = {
@@ -79,7 +79,7 @@ ZLIB_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'zlib', 'win32', 'zlibstat.lib'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'zlib', 'win64', 'zlibstat.lib'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'zlib', 'openbsd64', 'libz.a'),
-    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'zlib', 'freebsd1064', 'libz.a'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'zlib', 'freebsd64', 'libz.a'),
 }
 
 
