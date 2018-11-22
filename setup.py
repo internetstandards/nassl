@@ -39,13 +39,14 @@ if architecture()[0] == '64bit':
         CURRENT_PLATFORM = SupportedPlatformEnum.LINUX_64
     elif platform == 'win32':
         CURRENT_PLATFORM = SupportedPlatformEnum.WINDOWS_64
-    elif platform == 'openbsd5':
+    elif platform in ['openbsd5', 'freebsd10']:
         CURRENT_PLATFORM = SupportedPlatformEnum.OPENBSD_64
 elif architecture()[0] == '32bit':
     if platform in ['linux', 'linux2']:
         CURRENT_PLATFORM = SupportedPlatformEnum.LINUX_32
     elif platform == 'win32':
         CURRENT_PLATFORM = SupportedPlatformEnum.WINDOWS_32
+
 
 LEGACY_OPENSSL_INSTALL_PATH_DICT = {
     # Need full paths (hence the getcwd()) as they get passed to OpenSSL in build_from_scratch.py
