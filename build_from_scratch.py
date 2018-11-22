@@ -67,7 +67,7 @@ class OpenSslBuildConfig(object):
         elif self.platform == SupportedPlatformEnum.LINUX_32:
             openssl_target = 'linux-elf'
 
-        elif self.platform == SupportedPlatformEnum.FREEBSD10_64:
+        elif self.platform == SupportedPlatformEnum.FREEBSD_64:
             openssl_target = 'BSD-x86_64'
 
 
