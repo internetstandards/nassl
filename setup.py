@@ -59,6 +59,7 @@ LEGACY_OPENSSL_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'win32'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'win64'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'openbsd64'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-legacy', 'freebsd1064'),
 }
 
 MODERN_OPENSSL_INSTALL_PATH_DICT = {
@@ -68,6 +69,7 @@ MODERN_OPENSSL_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'openssl-modern', 'win32'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'win64'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'openbsd64'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'openssl-modern', 'freebsd1064'),
 }
 
 ZLIB_INSTALL_PATH_DICT = {
@@ -77,6 +79,7 @@ ZLIB_INSTALL_PATH_DICT = {
     SupportedPlatformEnum.WINDOWS_32: join(_ROOT_BUILD_PATH, 'zlib', 'win32', 'zlibstat.lib'),
     SupportedPlatformEnum.WINDOWS_64: join(_ROOT_BUILD_PATH, 'zlib', 'win64', 'zlibstat.lib'),
     SupportedPlatformEnum.OPENBSD_64: join(_ROOT_BUILD_PATH, 'zlib', 'openbsd64', 'libz.a'),
+    SupportedPlatformEnum.FREEBSD_64: join(_ROOT_BUILD_PATH, 'zlib', 'freebsd1064', 'libz.a'),
 }
 
 
