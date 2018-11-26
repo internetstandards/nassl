@@ -42,7 +42,7 @@ if architecture()[0] == '64bit':
         CURRENT_PLATFORM = SupportedPlatformEnum.WINDOWS_64
     elif platform == 'openbsd5':
         CURRENT_PLATFORM = SupportedPlatformEnum.OPENBSD_64
-    elif platform == 'freebsd10':
+    elif platform in ['freebsd10', 'freebsd11']:
         CURRENT_PLATFORM = SupportedPlatformEnum.FREEBSD_64
 elif architecture()[0] == '32bit':
     if platform in ['linux', 'linux2']:
