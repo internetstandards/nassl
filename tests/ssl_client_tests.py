@@ -205,7 +205,7 @@ class ModernSslClientOnlineTls13Tests(unittest.TestCase):
     def test_tls_1_3(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(10)
-        sock.connect(('tls13.crypto.mozilla.org', 443))
+        sock.connect(('tls13.akamai.io', 443))
         ssl_client = SslClient(ssl_version=OpenSslVersionEnum.TLSV1_3, underlying_socket=sock,
                                ssl_verify=OpenSslVerifyEnum.NONE)
         self.assertTrue(ssl_client)
@@ -215,12 +215,12 @@ class ModernSslClientOnlineTls13Tests(unittest.TestCase):
 
 class ModernSslClientOnlineEarlyDataTests(unittest.TestCase):
 
-    _DATA_TO_SEND = 'GET / HTTP/1.1\r\nHost: tls13.crypto.mozilla.org\r\n\r\n'
+    _DATA_TO_SEND = 'GET / HTTP/1.1\r\nHost: tls13.akamai.io\r\n\r\n'
 
     def setUp(self):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(10)
-        sock.connect(('tls13.crypto.mozilla.org', 443))
+        sock.connect(('tls13.akamai.io', 443))
         ssl_client = SslClient(ssl_version=OpenSslVersionEnum.TLSV1_3, underlying_socket=sock,
                                ssl_verify=OpenSslVerifyEnum.NONE)
         self.ssl_client = ssl_client
