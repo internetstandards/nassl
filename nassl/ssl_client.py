@@ -91,7 +91,8 @@ class SslClient(object):
             client_key_file=None,                           # type: Optional[Text]
             client_key_type=OpenSslFileTypeEnum.PEM,        # type: OpenSslFileTypeEnum
             client_key_password='',                         # type: Text
-            ignore_client_authentication_requests=False     # type: bool
+            ignore_client_authentication_requests=False,    # type: bool
+            signature_algorithms=None                       # type: Optional[Text]
     ):
         # type: (...) -> None
         self._init_base_objects(ssl_version, underlying_socket)
@@ -100,7 +101,8 @@ class SslClient(object):
         # Otherwise changes to the SSL_CTX do not get propagated to future SSL objects
         self._init_server_authentication(ssl_verify, ssl_verify_locations)
         self._init_client_authentication(client_certchain_file, client_key_file, client_key_type,
-                                         client_key_password,ignore_client_authentication_requests)
+                                         client_key_password, ignore_client_authentication_requests)
+        self._set_tlsext_signature_algorithms(signature_algorithms):
         # Now create the SSL object
         self._init_ssl_objects()
 
@@ -303,6 +305,24 @@ class SslClient(object):
         """Set the hostname within the Server Name Indication extension in the client SSL Hello.
         """
         self._ssl.set_tlsext_host_name(name_indication)
+
+    def _set_tlsext_signature_algorithms(self, sig_algs):
+        # type: (Text) -> int
+        """Set the desired signature algorithm within the Signature Algorithm extension in the client SSL Hello.
+           sig_algs should consist of colon separated pairs of 'digest algorithm+public key algorithm', e.g.:
+           RSA+SHA256:RSA+SHA1
+           Return 1 for success and 0 for failure.
+           See: https://www.openssl.org/docs/man1.1.1/man3/SSL_set1_sigalgs.html
+        """
+        self._ssl_ctx.set1_sigalgs_list(sig_algs)
+
+    def get_peer_signature_digest(self):
+        # type: () -> str
+        """Returns the short name of the signature type used by the peer to sign TLS messages.
+
+           See: https://www.openssl.org/docs/man1.1.1/man3/SSL_get_peer_signature_nid.html
+        """
+        return self._ssl.get_peer_signature_digest()
 
     def get_peer_certificate(self):
         # type: () -> Optional[X509]

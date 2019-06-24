@@ -295,6 +295,17 @@ static PyObject* nassl_SSL_CTX_set_client_cert_cb_NULL(nassl_SSL_CTX_Object *sel
     Py_RETURN_NONE;
 }
 
+static PyObject* nassl_SSL_CTX_set1_sigalgs_list(nassl_SSL_CTX_Object *self, PyObject *args)
+{
+    char *sigAlgList = NULL;
+    if (!PyArg_ParseTuple(args, "s", &sigAlgList))
+    {
+        return NULL;
+    }
+
+    return Py_BuildValue("I", SSL_CTX_set1_sigalgs_list(self->sslCtx, sigAlgList));
+}
+
 
 static PyMethodDef nassl_SSL_CTX_Object_methods[] =
 {
@@ -318,6 +329,9 @@ static PyMethodDef nassl_SSL_CTX_Object_methods[] =
     },
     {"set_client_cert_cb_NULL", (PyCFunction)nassl_SSL_CTX_set_client_cert_cb_NULL, METH_NOARGS,
      "Configure a NULL client certificate callback in order to ignore client certificate requests from the server and continue even if no certificate was provided."
+    },
+    {"set1_sigalgs_list", (PyCFunction)nassl_SSL_CTX_set1_sigalgs_list, METH_VARARGS,
+     "OpenSSL's SSL_CTX_set1_sigalgs_list()."
     },
     {NULL}  // Sentinel
 };
