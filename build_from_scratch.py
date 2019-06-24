@@ -289,7 +289,7 @@ def main():
 
     # Test nassl
     NASSL_TEST_TASKS = ['{python} setup.py test'.format(python=sys.executable)]
-    perform_build_task('NASSL Tests', NASSL_TEST_TASKS)
+    #perform_build_task('NASSL Tests', NASSL_TEST_TASKS)
 
     print ('=== All Done! ===')
 
