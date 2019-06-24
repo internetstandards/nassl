@@ -315,7 +315,7 @@ class SslClient(object):
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_set1_sigalgs.html
         """
         if sig_algs:
-            self._ssl_ctx.set1_sigalgs_list(sig_algs)
+            return self._ssl_ctx.set1_sigalgs_list(sig_algs)
 
     def get_peer_signature_digest(self):
         # type: () -> str
