@@ -314,7 +314,8 @@ class SslClient(object):
            Return 1 for success and 0 for failure.
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_set1_sigalgs.html
         """
-        self._ssl_ctx.set1_sigalgs_list(sig_algs)
+        if sig_algs:
+            self._ssl_ctx.set1_sigalgs_list(sig_algs)
 
     def get_peer_signature_digest(self):
         # type: () -> str
