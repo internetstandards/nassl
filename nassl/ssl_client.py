@@ -102,7 +102,8 @@ class SslClient(object):
         self._init_server_authentication(ssl_verify, ssl_verify_locations)
         self._init_client_authentication(client_certchain_file, client_key_file, client_key_type,
                                          client_key_password, ignore_client_authentication_requests)
-        self._set_tlsext_signature_algorithms(signature_algorithms)
+        if signature_algorithms:
+            self._set_tlsext_signature_algorithms(signature_algorithms)
         # Now create the SSL object
         self._init_ssl_objects()
 
@@ -314,11 +315,10 @@ class SslClient(object):
            Return 1 for success and 0 for failure.
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_set1_sigalgs.html
         """
-        if sig_algs:
-            return self._ssl_ctx.set1_sigalgs_list(sig_algs)
+        return self._ssl_ctx.set1_sigalgs_list(sig_algs)
 
     def get_peer_signature_digest(self):
-        # type: () -> str
+        # type: () -> Text
         """Returns the short name of the signature type used by the peer to sign TLS messages.
 
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_get_peer_signature_nid.html

@@ -46,7 +46,8 @@ class LegacySslClient(SslClient):
         self._init_server_authentication(ssl_verify, ssl_verify_locations)
         self._init_client_authentication(client_certchain_file, client_key_file, client_key_type,
                                          client_key_password,ignore_client_authentication_requests)
-        self._set_tlsext_signature_algorithms(signature_algorithms)
+        if signature_algorithms:
+            self._set_tlsext_signature_algorithms(signature_algorithms)
         # Now create the SSL object
         self._init_ssl_objects()
 
