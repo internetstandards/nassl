@@ -35,7 +35,8 @@ class LegacySslClient(SslClient):
             client_key_file=None,                           # type: Optional[Text]
             client_key_type=OpenSslFileTypeEnum.PEM,        # type: OpenSslFileTypeEnum
             client_key_password='',                         # type: Text
-            ignore_client_authentication_requests=False     # type: bool
+            ignore_client_authentication_requests=False,    # type: bool
+            signature_algorithms=None                       # type: Optional[Text]
     ):
         # type: (...) -> None
         self._init_base_objects(ssl_version, underlying_socket)
@@ -45,6 +46,7 @@ class LegacySslClient(SslClient):
         self._init_server_authentication(ssl_verify, ssl_verify_locations)
         self._init_client_authentication(client_certchain_file, client_key_file, client_key_type,
                                          client_key_password,ignore_client_authentication_requests)
+        self._set_tlsext_signature_algorithms(signature_algorithms)
         # Now create the SSL object
         self._init_ssl_objects()
 
