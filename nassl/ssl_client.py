@@ -319,7 +319,7 @@ class SslClient(object):
 
     def get_peer_signature_digest(self):
         # type: () -> Text
-        """Returns the short name of the signature type used by the peer to sign TLS messages.
+        """Returns the short name of the signature digest used by the peer to sign TLS messages.
 
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_get_peer_signature_nid.html
         """
