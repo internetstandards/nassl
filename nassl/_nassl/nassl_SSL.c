@@ -675,6 +675,7 @@ static PyObject* nassl_SSL_get_peer_signature_digest(nassl_SSL_Object *self, PyO
 }
 
 
+#ifndef LEGACY_OPENSSL
 // Based on OpenSSL 1.1.1 ssl_print_sigalgs() which is responsible for the
 // "Peer signing digest: xxx" output when using openssl s_client to connect to
 // an SSL/TLS server.
@@ -691,6 +692,7 @@ static PyObject* nassl_SSL_get_peer_signature_type(nassl_SSL_Object *self, PyObj
         Py_RETURN_NONE;
     }
 }
+#endif
 
 
 static PyObject* nassl_SSL_get_tlsext_status_ocsp_resp(nassl_SSL_Object *self, PyObject *args)
@@ -972,9 +974,11 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     {"get_peer_signature_digest", (PyCFunction)nassl_SSL_get_peer_signature_digest, METH_NOARGS,
     "Wraps OpenSSL's SSL_get_peer_signature_nid() returning the short name of the digest algorithm used by the peer to sign TLS messages."
     },
+#ifndef LEGACY_OPENSSL
     {"get_peer_signature_type", (PyCFunction)nassl_SSL_get_peer_signature_type, METH_NOARGS,
     "Wraps OpenSSL's SSL_get_peer_signature_type_nid() returning the short name of the signature algorithm used by the peer to sign TLS messages."
     },
+#endif
     {"get_peer_certificate", (PyCFunction)nassl_SSL_get_peer_certificate, METH_NOARGS,
      "OpenSSL's SSL_get_peer_certificate(). Returns an _nassl.X509 object."
     },
