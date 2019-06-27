@@ -325,6 +325,14 @@ class SslClient(object):
         """
         return self._ssl.get_peer_signature_digest()
 
+    def get_peer_signature_type(self):
+        # type: () -> Text
+        """Returns the short name of the signature type used by the peer to sign TLS messages.
+
+           See: https://www.openssl.org/docs/man1.1.1/man3/SSL_get_peer_signature_type_nid.html
+        """
+        return self._ssl.get_peer_signature_type()
+
     def get_peer_certificate(self):
         # type: () -> Optional[X509]
         return self._ssl.get_peer_certificate()
