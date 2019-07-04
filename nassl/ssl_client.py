@@ -428,3 +428,6 @@ class SslClient(object):
     def disable_stateless_session_resumption(self):
         # type: () -> None
         self._ssl.set_options(self._SSL_OP_NO_TICKET)
+
+    def get_ssl_version(self):
+        return self._ssl.get_ssl_version()
