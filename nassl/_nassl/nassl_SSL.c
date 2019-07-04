@@ -666,7 +666,7 @@ static PyObject* nassl_SSL_get_peer_signature_digest(nassl_SSL_Object *self, PyO
     int nid;
     if (SSL_get_peer_signature_nid(self->ssl, &nid) && nid != NID_undef)
     {
-        return PyUnicode_FromString(nid2sn(nid));
+        return PyUnicode_FromString(OBJ_nid2sn(nid));
     }
     else
     {
