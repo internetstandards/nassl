@@ -27,6 +27,7 @@ class OpenSslVerifyEnum(IntEnum):
 class OpenSslVersionEnum(IntEnum):
     """SSL version constants.
     """
+    UNKNOWN = -1
     SSLV23 = 0
     SSLV2 = 1
     SSLV3 = 2
@@ -430,4 +431,17 @@ class SslClient(object):
         self._ssl.set_options(self._SSL_OP_NO_TICKET)
 
     def get_ssl_version(self):
-        return self._ssl.get_ssl_version()
+        version = self._ssl.get_ssl_version()
+        # see ssl3.h and tls1.h
+        if version == 0x0300:  # SSL3_VERSION
+            return OpenSslVersionEnum.SSLV3
+        elif version == 0x0301:  # TLS1_VERSION
+            return OpenSslVersionEnum.TLSV1
+        elif version == 0x0302:  # TLS1_1_VERSION
+            return OpenSslVersionEnum.TLSV1_1
+        elif version == 0x0303:  # TLS1_2_VERSION
+            return OpenSslVersionEnum.TLSV1_2
+        elif version == 0x0304:  # TLS1_3_VERSION
+            return OpenSslVersionEnum.TLSV1_3
+        else:
+            return OpenSslVersionEnum.UNKNOWN
