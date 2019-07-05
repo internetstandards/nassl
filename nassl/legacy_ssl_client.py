@@ -219,3 +219,18 @@ class LegacySslClient(SslClient):
             except WantX509LookupError:
                 # Server asked for a client certificate and we didn't provide one
                 raise ClientCertificateRequested(self.get_client_CA_list())
+
+    def get_ssl_version(self):
+        version = self._ssl.get_ssl_version_string()
+        if version == 'SSLv2':
+            return OpenSslVersionEnum.SSLV2
+        elif version == 'SSLv3':
+            return OpenSslVersionEnum.SSLV3
+        elif version == 'TLSv1':
+            return OpenSslVersionEnum.TLSV1
+        elif version == 'TLSv1.1':
+            return OpenSslVersionEnum.TLSV1_1
+        elif version == 'TLSv1.2':
+            return OpenSslVersionEnum.TLSV1_2
+        else:
+            return OpenSslVersionEnum.UNKNOWN
