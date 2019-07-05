@@ -915,10 +915,9 @@ static PyObject* nassl_SSL_get_peer_cert_chain(nassl_SSL_Object *self, PyObject 
     return certChainPyList;
 }
 
-static PyObject* nassl_SSL_get_version(nassl_SSL_Object *self, PyObject *args)
+static PyObject* nassl_SSL_version(nassl_SSL_Object *self, PyObject *args)
 {
-    const char *version = SSL_get_version(self->ssl);
-    return PyUnicode_FromString(version);
+    return Py_BuildValue("I", SSL_version(self->ssl));
 }
 
 
@@ -1038,8 +1037,8 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     {"get_peer_cert_chain", (PyCFunction)nassl_SSL_get_peer_cert_chain, METH_NOARGS,
      "OpenSSL's SSL_get_peer_cert_chain(). Returns an array of _nassl.X509 objects."
     },
-    {"get_ssl_version", (PyCFunction)nassl_SSL_get_version, METH_NOARGS,
-     "OpenSSL's SSL_get_version()."
+    {"get_ssl_version", (PyCFunction)nassl_SSL_version, METH_NOARGS,
+     "OpenSSL's SSL_version()."
     },
     {NULL}  // Sentinel
 };
