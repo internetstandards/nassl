@@ -660,7 +660,7 @@ static PyObject* nassl_SSL_set_tlsext_status_type(nassl_SSL_Object *self, PyObje
 // Based on OpenSSL 1.1.1 ssl_print_sigalgs() which is responsible for the
 // "Peer signing digest: xxx" output when using openssl s_client to connect to
 // an SSL/TLS server.
-// See: https://github.com/openssl/openssl/blob/OpenSSL_1_1_1-stable/apps/s_cb.c#L300
+// See: https://github.com/openssl/openssl/blob/OpenSSL_1_1_1-stable/apps/s_cb.c#L301
 static PyObject* nassl_SSL_get_peer_signature_digest(nassl_SSL_Object *self, PyObject *args)
 {
     int nid;
@@ -677,9 +677,9 @@ static PyObject* nassl_SSL_get_peer_signature_digest(nassl_SSL_Object *self, PyO
 
 #ifndef LEGACY_OPENSSL
 // Based on OpenSSL 1.1.1 ssl_print_sigalgs() which is responsible for the
-// "Peer signing digest: xxx" output when using openssl s_client to connect to
+// "Peer signature type: xxx" output when using openssl s_client to connect to
 // an SSL/TLS server.
-// See: https://github.com/openssl/openssl/blob/OpenSSL_1_1_1-stable/apps/s_cb.c#L300
+// See: https://github.com/openssl/openssl/blob/OpenSSL_1_1_1-stable/apps/s_cb.c#L303
 static PyObject* nassl_SSL_get_peer_signature_type(nassl_SSL_Object *self, PyObject *args)
 {
     int nid;
