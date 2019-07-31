@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import socket
 
 from nassl import _nassl  # type: ignore
-from nassl._nassl import WantReadError, OpenSSLError, WantX509LookupError, X509  # type: ignore
+from nassl._nassl import WantReadError, OpenSSLError, WantX509LookupError, X509, SslError  # type: ignore
 
 from enum import IntEnum
 from typing import List
@@ -216,24 +216,35 @@ class SslClient(object):
             raise IOError('SSL Handshake was not completed; cannot receive data.')
 
         while True:
-            # Receive available encrypted data from the peer
-            encrypted_data = self._sock.recv(self._DEFAULT_BUFFER_SIZE)
-
-            if len(encrypted_data) == 0:
-                raise IOError('Could not read() - peer closed the connection.')
-
-            # Pass it to the SSL engine
-            self._network_bio.write(encrypted_data)
-
             try:
                 # Try to read the decrypted data
                 decrypted_data = self._ssl.read(size)
                 return decrypted_data
+            except (WantReadError, SslError) as e:
+                # A 'Connection shut down by peer' SslError is raised
+                # when the previous call to _ssl.read() consumed all of
+                # available data and left the buffer empty. As we
+                # handle reading from the network socket ourself this
+                # error does not actually mean that the peer shut down
+                # the connection, if we try reading again from the
+                # socket we might find there is new data waiting for
+                # us. Any other SslError is unexpected however.
+                # TODO: create a new dedicated exception type upstream
+                # for this case.
+                if (type(e) is SslError and str(e) != 'Connection was shut down by peer'):
+                    raise
 
-            except WantReadError:
                 # The SSL engine needs more data
                 # before it can decrypt the whole message
-                pass
+
+                # Receive available encrypted data from the peer
+                encrypted_data = self._sock.recv(4096)
+
+                if len(encrypted_data) <= 0:
+                    raise IOError('Could not read() - peer closed the connection.')
+                else:
+                    # Pass it to the SSL engine
+                    self._network_bio.write(encrypted_data)
 
     def write(self, data):
         # type: (bytes) -> int
