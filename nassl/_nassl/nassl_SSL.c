@@ -443,6 +443,23 @@ static PyObject* nassl_SSL_set_cipher_list(nassl_SSL_Object *self, PyObject *arg
 }
 
 
+static PyObject* nassl_SSL_set_ciphersuites(nassl_SSL_Object *self, PyObject *args)
+{
+    char *cipherSuites;
+    if (!PyArg_ParseTuple(args, "s", &cipherSuites))
+    {
+        return NULL;
+    }
+
+    if (!SSL_set_ciphersuites(self->ssl, cipherSuites))
+    {
+        return raise_OpenSSL_error();
+    }
+
+    Py_RETURN_NONE;
+}
+
+
 static PyObject* nassl_SSL_get_cipher_list(nassl_SSL_Object *self, PyObject *args)
 {
     unsigned int priority = 0;
@@ -995,6 +1012,9 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     },
     {"set_cipher_list", (PyCFunction)nassl_SSL_set_cipher_list, METH_VARARGS,
      "OpenSSL's SSL_set_cipher_list()."
+    },
+    {"set_ciphersuites", (PyCFunction)nassl_SSL_set_ciphersuites, METH_VARARGS,
+     "OpenSSL's SSL_set_ciphersuites()."
     },
     {"get_cipher_list", (PyCFunction)nassl_SSL_get_cipher_list, METH_NOARGS,
      "Returns a list of cipher strings using OpenSSL's SSL_get_cipher_list()."

@@ -356,9 +356,12 @@ class SslClient(object):
         """
         return self._ssl.get_peer_cert_chain()
 
-    def set_cipher_list(self, cipher_list):
+    def set_cipher_list(self, cipher_list=None, ciphersuites=None):
         # type: (Text) -> None
-        self._ssl.set_cipher_list(cipher_list)
+        if cipher_list:
+            self._ssl.set_cipher_list(cipher_list)
+        if ciphersuites:
+            self._ssl.set_ciphersuites(ciphersuites)
 
     def get_cipher_list(self):
         # type: () -> List[Text]

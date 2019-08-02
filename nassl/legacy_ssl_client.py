@@ -61,6 +61,10 @@ class LegacySslClient(SslClient):
             # TODO(AD): Provide a built-in mechansim for overriding the handshake logic
             self.do_handshake = self.do_ssl2_iis_handshake  # type: ignore
 
+    def set_cipher_list(self, cipher_list):
+        # type: (Text) -> None
+        self._ssl.set_cipher_list(cipher_list)
+
     def get_secure_renegotiation_support(self):
         # type: () -> bool
         return self._ssl.get_secure_renegotiation_support()
