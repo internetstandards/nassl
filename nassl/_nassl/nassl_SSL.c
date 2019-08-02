@@ -443,6 +443,7 @@ static PyObject* nassl_SSL_set_cipher_list(nassl_SSL_Object *self, PyObject *arg
 }
 
 
+#ifndef LEGACY_OPENSSL
 static PyObject* nassl_SSL_set_ciphersuites(nassl_SSL_Object *self, PyObject *args)
 {
     char *cipherSuites;
@@ -458,6 +459,7 @@ static PyObject* nassl_SSL_set_ciphersuites(nassl_SSL_Object *self, PyObject *ar
 
     Py_RETURN_NONE;
 }
+#endif
 
 
 static PyObject* nassl_SSL_get_cipher_list(nassl_SSL_Object *self, PyObject *args)
@@ -1013,9 +1015,11 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     {"set_cipher_list", (PyCFunction)nassl_SSL_set_cipher_list, METH_VARARGS,
      "OpenSSL's SSL_set_cipher_list()."
     },
+#ifndef LEGACY_OPENSSL
     {"set_ciphersuites", (PyCFunction)nassl_SSL_set_ciphersuites, METH_VARARGS,
      "OpenSSL's SSL_set_ciphersuites()."
     },
+#endif
     {"get_cipher_list", (PyCFunction)nassl_SSL_get_cipher_list, METH_NOARGS,
      "Returns a list of cipher strings using OpenSSL's SSL_get_cipher_list()."
     },
