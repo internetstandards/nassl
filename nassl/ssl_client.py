@@ -327,7 +327,8 @@ class SslClient(object):
            Return 1 for success and 0 for failure.
            See: https://www.openssl.org/docs/man1.1.1/man3/SSL_set1_sigalgs.html
         """
-        return self._ssl_ctx.set1_sigalgs_list(sig_algs)
+        if not self._ssl_ctx.set1_sigalgs_list(sig_algs):
+            raise ValueError('Invalid or unsupported signature algorithm')
 
     def get_peer_signature_digest(self):
         # type: () -> Text
