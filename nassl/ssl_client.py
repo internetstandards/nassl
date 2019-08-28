@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import os
 import socket
 
 from nassl import _nassl  # type: ignore
@@ -13,6 +14,9 @@ from typing import Optional
 from typing import Text
 from typing import Tuple
 from nassl.ocsp_response import OcspResponse
+
+import re
+SECRETS_PATTERN = re.compile(r'Session-ID: (?P<sessid>[0-9A-Z]+).+Master-Key: (?P<masterkey>[0-9A-Z]+)')
 
 
 class OpenSslVerifyEnum(IntEnum):
@@ -183,6 +187,7 @@ class SslClient(object):
             try:
                 self._ssl.do_handshake()
                 self._is_handshake_completed = True
+                self.log_ssl_keys()
                 # Handshake was successful
                 return
 
@@ -460,3 +465,22 @@ class SslClient(object):
             return OpenSslVersionEnum.TLSV1_3
         else:
             return OpenSslVersionEnum.UNKNOWN
+
+    def log_ssl_keys(self):
+        """
+        See: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Key_Log_Format
+             https://www.openssl.org/docs/man1.1.1/man3/SSL_CTX_set_keylog_callback.html
+        """
+        logfilepath = os.getenv('SSLKEYLOGFILE', None)
+        if logfilepath:
+            try:
+                with open(logfilepath, "a") as file:
+                    file.write('RSA Session-ID:{} Master-Key:{}\n'.format(
+                        *self.get_secrets()))
+            except Exception:
+                pass
+
+    def get_secrets(self):
+        # Dumb but works on both OpenSSL 1.0.2 and 1.1,1.
+        matched = SECRETS_PATTERN.search(self.get_session().as_text().replace('\n', ''))
+        return (matched.group("sessid"), matched.group("masterkey"))
