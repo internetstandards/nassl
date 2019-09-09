@@ -381,6 +381,14 @@ class SslClient(object):
         # type: () -> int
         return self._ssl.get_cipher_bits()
 
+    def get_current_cipher_protocol_id(self):
+        id = self._ssl.get_cipher_protocol_id()
+        if id:
+            # E.g. TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 is 0xC0,0x2F
+            return (id >> 8, id & 0x00FF)
+        else:
+            return None
+
     def _use_private_key(self, client_certchain_file, client_key_file, client_key_type, client_key_password):
         # type: (Text, Text, OpenSslFileTypeEnum, Text) -> None
         """The certificate chain file must be in PEM format. Private method because it should be set via the

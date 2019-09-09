@@ -546,6 +546,21 @@ static PyObject* nassl_SSL_get_cipher_name(nassl_SSL_Object *self, PyObject *arg
 }
 
 
+static PyObject* nassl_SSL_get_cipher_protocol_id(nassl_SSL_Object *self, PyObject *args)
+{
+    const SSL_CIPHER *cipher = get_tmp_new_cipher(self);
+    if (!cipher) {
+        Py_RETURN_NONE;
+    }
+#ifdef LEGACY_OPENSSL
+    unsigned short id = (unsigned short) (cipher->id & 0x0000FFFF);
+#else
+    unsigned short id = SSL_CIPHER_get_protocol_id(self->ssl);
+#endif
+    return Py_BuildValue("H", id);
+}
+
+
 static PyObject* nassl_SSL_get_client_CA_list(nassl_SSL_Object *self, PyObject *args)
 {
     PyObject* namesPyList = NULL;
@@ -1001,10 +1016,10 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     {"set_tlsext_host_name", (PyCFunction)nassl_SSL_set_tlsext_host_name, METH_VARARGS,
      "OpenSSL's SSL_set_tlsext_host_name()."
     },
+#ifndef LEGACY_OPENSSL
     {"get_peer_signature_digest", (PyCFunction)nassl_SSL_get_peer_signature_digest, METH_NOARGS,
     "Wraps OpenSSL's SSL_get_peer_signature_nid() returning the short name of the digest algorithm used by the peer to sign TLS messages."
     },
-#ifndef LEGACY_OPENSSL
     {"get_peer_signature_type", (PyCFunction)nassl_SSL_get_peer_signature_type, METH_NOARGS,
     "Wraps OpenSSL's SSL_get_peer_signature_type_nid() returning the short name of the signature algorithm used by the peer to sign TLS messages."
     },
@@ -1028,6 +1043,9 @@ static PyMethodDef nassl_SSL_Object_methods[] =
     },
     {"get_cipher_name", (PyCFunction)nassl_SSL_get_cipher_name, METH_NOARGS,
      "OpenSSL's SSL_get_cipher_name()."
+    },
+    {"get_cipher_protocol_id", (PyCFunction)nassl_SSL_get_cipher_protocol_id, METH_NOARGS,
+     "OpenSSL's SSL_CIPHER_get_protocol_id()."
     },
     {"get_client_CA_list", (PyCFunction)nassl_SSL_get_client_CA_list, METH_NOARGS,
      "Returns a list of name strings using OpenSSL's SSL_get_client_CA_list() and X509_NAME_oneline()."
