@@ -376,6 +376,7 @@ class SslClient(object):
     def get_cipher_description(self, cipher_name):
         """
         Returns None, or a string like 'ECDHE-RSA-AES128-GCM-SHA256 TLSv1.2 Kx=ECDH     Au=RSA  Enc=AESGCM(128) Mac=AEAD'.
+        See: https://www.openssl.org/docs/man1.0.2/man3/SSL_CIPHER_description.html
         See: https://www.openssl.org/docs/man1.1.1/man3/SSL_CIPHER_description.html
         """
         desc = self._ssl.get_cipher_description(cipher_name)
