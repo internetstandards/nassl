@@ -514,24 +514,24 @@ static PyObject* nassl_SSL_get_cipher_description(nassl_SSL_Object *self, PyObje
         return NULL;
     }
 
-    char cipherDesc[128];
-    PyObject* result = NULL;
+    const SSL_CIPHER *found_cipher = NULL;
 
     // Based on: https://github.com/openssl/openssl/blob/master/apps/ciphers.c
     STACK_OF(SSL_CIPHER) *sk = SSL_get_ciphers(self->ssl);
-    for (int i = 0; i < sk_SSL_CIPHER_num(sk); i++) {
+    for (int i = 0; found_cipher == NULL && i < sk_SSL_CIPHER_num(sk); i++) {
         const SSL_CIPHER *c = sk_SSL_CIPHER_value(sk, i);
         const char *thisCipherName = SSL_CIPHER_get_name(c);
-        if (thisCipherName) {
-            if (strcmp(thisCipherName, wantedCipherName) == 0) {
-                sk_SSL_CIPHER_free(sk);
-                return PyUnicode_FromString(SSL_CIPHER_description(c, cipherDesc, 128));
-            }
+        if (thisCipherName && strcmp(thisCipherName, wantedCipherName) == 0) {
+            found_cipher = c;
         }
     }
 
-    sk_SSL_CIPHER_free(sk);
-    Py_RETURN_NONE;
+    if (found_cipher == NULL) {
+        Py_RETURN_NONE;
+    } else {
+        char cipherDesc[128];
+        return PyUnicode_FromString(SSL_CIPHER_description(found_cipher, cipherDesc, 128));
+    }
 }
 
 
