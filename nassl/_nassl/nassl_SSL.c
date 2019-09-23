@@ -506,6 +506,35 @@ static PyObject* nassl_SSL_get_cipher_list(nassl_SSL_Object *self, PyObject *arg
 }
 
 
+static PyObject* nassl_SSL_get_cipher_description(nassl_SSL_Object *self, PyObject *args)
+{
+    char *wantedCipherName;
+    if (!PyArg_ParseTuple(args, "s", &wantedCipherName))
+    {
+        return NULL;
+    }
+
+    char cipherDesc[128];
+    PyObject* result = NULL;
+
+    // Based on: https://github.com/openssl/openssl/blob/master/apps/ciphers.c
+    STACK_OF(SSL_CIPHER) *sk = SSL_get_ciphers(self->ssl);
+    for (int i = 0; i < sk_SSL_CIPHER_num(sk); i++) {
+        const SSL_CIPHER *c = sk_SSL_CIPHER_value(sk, i);
+        const char *thisCipherName = SSL_CIPHER_get_name(c);
+        if (thisCipherName) {
+            if (strcmp(thisCipherName, wantedCipherName) == 0) {
+                sk_SSL_CIPHER_free(sk);
+                return PyUnicode_FromString(SSL_CIPHER_description(c, cipherDesc, 128));
+            }
+        }
+    }
+
+    sk_SSL_CIPHER_free(sk);
+    Py_RETURN_NONE;
+}
+
+
 // Used to retrieve the cipher earlier in the connection
 // https://github.com/nabla-c0d3/nassl/pull/15
 static const SSL_CIPHER* get_tmp_new_cipher(nassl_SSL_Object *self)
@@ -1037,6 +1066,10 @@ static PyMethodDef nassl_SSL_Object_methods[] =
 #endif
     {"get_cipher_list", (PyCFunction)nassl_SSL_get_cipher_list, METH_NOARGS,
      "Returns a list of cipher strings using OpenSSL's SSL_get_cipher_list()."
+    },
+    {
+    "get_cipher_description", (PyCFunction)nassl_SSL_get_cipher_description, METH_VARARGS,
+    "Returns the cipher description using OpenSSL's SSL_CIPHER_description(),"
     },
     {"get_cipher_bits", (PyCFunction)nassl_SSL_get_cipher_bits, METH_NOARGS,
      "OpenSSL's SSL_get_cipher_bits()."
