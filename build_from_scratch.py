@@ -22,7 +22,7 @@ import subprocess
 # Warning: use a fresh Zlib src tree on Windows or build will fail ie. do not use the same Zlib src folder for Windows
 # and Unix build
 # TODO(AD): Only enable ZLib for legacy _nassl?
-ZLIB_PATH = join(getcwd(), 'zlib-1.2.13')
+ZLIB_PATH = join(getcwd(), 'zlib-1.3')
 
 MODERN_OPENSSL_PATH = join(getcwd(), 'openssl-master')  # Tested with 1f5878b8e25a785dde330bf485e6ed5a6ae09a1a
 LEGACY_OPENSSL_PATH = join(getcwd(), 'openssl-1.0.2e')
