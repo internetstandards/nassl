@@ -121,6 +121,8 @@ static PyObject* nassl_OCSP_RESPONSE_basic_verify(nassl_OCSP_RESPONSE_Object *se
 
     verifyRes = OCSP_basic_verify(basicResp, NULL, trustedCAs, 0);
     OCSP_BASICRESP_free(basicResp);
+    X509_STORE_free(trustedCAs);
+
     if (verifyRes <= 0)
     {
         return raise_OpenSSL_error();
